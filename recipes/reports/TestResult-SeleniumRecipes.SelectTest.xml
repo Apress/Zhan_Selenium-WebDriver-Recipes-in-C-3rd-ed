@@ -1,0 +1,19 @@
+<testsuites>
+  <testsuite name="SeleniumRecipesCSharp.dll" tests="12" skipped="0" failures="0" errors="0" time="5.096072900000001" timestamp="2023-07-12T00:48:09" hostname="iMac-Study" id="0" package="SeleniumRecipesCSharp.dll">
+    <properties />
+    <testcase classname="SeleniumRecipes.SelectTest" name="TestSelectOptionByLabel" time="2.8247514" />
+    <testcase classname="SeleniumRecipes.SelectTest" name="TestSelectOptionByValue" time="0.1273917" />
+    <testcase classname="SeleniumRecipes.SelectTest" name="TestSelectOptionByIndex" time="0.1334018" />
+    <testcase classname="SeleniumRecipes.SelectTest" name="TestSelectOptionBySendKeys" time="0.7981956" />
+    <testcase classname="SeleniumRecipes.SelectTest" name="TestSelectByIteratingOption" time="0.0926028" />
+    <testcase classname="SeleniumRecipes.SelectTest" name="TestVerifyOptionInSelectList" time="0.1193168" />
+    <testcase classname="SeleniumRecipes.SelectTest" name="TestVerifySelectedValue" time="0.1137875" />
+    <testcase classname="SeleniumRecipes.SelectTest" name="TestVerifySelectedText" time="0.1066731" />
+    <testcase classname="SeleniumRecipes.SelectTest" name="TestSelectMultiple" time="0.2110295" />
+    <testcase classname="SeleniumRecipes.SelectTest" name="TestDeselectOption" time="0.2169157" />
+    <testcase classname="SeleniumRecipes.SelectTest" name="TestDeselectMultipleAllOptions" time="0.2015050" />
+    <testcase classname="SeleniumRecipes.SelectTest" name="TestAssertMultipleSelectedOptions" time="0.1505020" />
+    <system-out></system-out>
+    <system-err></system-err>
+  </testsuite>
+</testsuites>

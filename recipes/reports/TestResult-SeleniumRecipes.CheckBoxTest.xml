@@ -1,0 +1,13 @@
+<testsuites>
+  <testsuite name="SeleniumRecipesCSharp.dll" tests="6" skipped="0" failures="0" errors="0" time="2.9448452" timestamp="2023-07-12T00:48:16" hostname="iMac-Study" id="0" package="SeleniumRecipesCSharp.dll">
+    <properties />
+    <testcase classname="SeleniumRecipes.CheckBoxTest" name="TestCheckByName" time="2.1722806" />
+    <testcase classname="SeleniumRecipes.CheckBoxTest" name="TestCheckByID" time="0.1009144" />
+    <testcase classname="SeleniumRecipes.CheckBoxTest" name="TestUncheck" time="0.2106762" />
+    <testcase classname="SeleniumRecipes.CheckBoxTest" name="TestVerifyCheckBoxSelected" time="0.1252684" />
+    <testcase classname="SeleniumRecipes.CheckBoxTest" name="TestCheckByChainingLocators" time="0.1351164" />
+    <testcase classname="SeleniumRecipes.CheckBoxTest" name="testCustomizeiCheckCheckboxes" time="0.2005892" />
+    <system-out></system-out>
+    <system-err></system-err>
+  </testsuite>
+</testsuites>

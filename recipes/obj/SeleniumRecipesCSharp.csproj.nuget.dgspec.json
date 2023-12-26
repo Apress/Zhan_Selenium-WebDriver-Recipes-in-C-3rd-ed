@@ -1,0 +1,107 @@
+{
+  "format": 1,
+  "restore": {
+    "/Users/zhimin/work/books/selenium-webdriver-recipes-in-csharp-3ed/recipes/SeleniumRecipesCSharp.csproj": {}
+  },
+  "projects": {
+    "/Users/zhimin/work/books/selenium-webdriver-recipes-in-csharp-3ed/recipes/SeleniumRecipesCSharp.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "/Users/zhimin/work/books/selenium-webdriver-recipes-in-csharp-3ed/recipes/SeleniumRecipesCSharp.csproj",
+        "projectName": "SeleniumRecipesCSharp",
+        "projectPath": "/Users/zhimin/work/books/selenium-webdriver-recipes-in-csharp-3ed/recipes/SeleniumRecipesCSharp.csproj",
+        "packagesPath": "/Users/zhimin/.nuget/packages/",
+        "outputPath": "/Users/zhimin/work/books/selenium-webdriver-recipes-in-csharp-3ed/recipes/obj/",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "/Users/zhimin/.nuget/NuGet/NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net7.0"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net7.0": {
+            "targetAlias": "net7.0",
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net7.0": {
+          "targetAlias": "net7.0",
+          "dependencies": {
+            "JunitXml.TestLogger": {
+              "target": "Package",
+              "version": "[3.0.124, )"
+            },
+            "MSTest.TestAdapter": {
+              "target": "Package",
+              "version": "[2.2.10, )"
+            },
+            "MSTest.TestFramework": {
+              "target": "Package",
+              "version": "[2.2.10, )"
+            },
+            "Microsoft.NET.Test.Sdk": {
+              "target": "Package",
+              "version": "[17.3.2, )"
+            },
+            "Microsoft.Office.Interop.Excel": {
+              "target": "Package",
+              "version": "[15.0.4795.1001, )"
+            },
+            "SQLite": {
+              "target": "Package",
+              "version": "[3.13.0, )"
+            },
+            "Selenium.Support": {
+              "target": "Package",
+              "version": "[4.8.2, )"
+            },
+            "Selenium.WebDriver": {
+              "target": "Package",
+              "version": "[4.11.0, )"
+            },
+            "System.Data.SQLite": {
+              "target": "Package",
+              "version": "[1.0.118, )"
+            },
+            "System.Drawing.Common": {
+              "target": "Package",
+              "version": "[7.0.0, )"
+            },
+            "coverlet.collector": {
+              "target": "Package",
+              "version": "[3.1.2, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/7.0.202/RuntimeIdentifierGraph.json"
+        }
+      }
+    }
+  }
+}

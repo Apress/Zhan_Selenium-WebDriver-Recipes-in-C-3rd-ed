@@ -1,0 +1,67 @@
+<html>
+<head>
+ <link rel="stylesheet" type="text/css" href="style.css"/>
+ <script type="text/javascript" src="jquery.js"></script>
+ <script type="text/javascript" src="select2.js"></script>
+ <link rel="stylesheet" href="select2.css">
+ 
+</head>
+<body>
+<div id="container">
+  <h2>Select list (Select2)</h2>
+
+    <div id="content">
+      <p>Select2 is a jQuery plugin that makes long, unwieldy select boxes much more user-friendly.</p>
+
+<table border="0" cellspacing="5" cellpadding="5" width="100%">
+	<tr>
+		<td width="45%">
+	      <h4>Standard Select</h4>
+	    <div class="side-by-side clearfix">
+	      <div>
+					<br/>
+	        <select id="country_single" data-placeholder="Choose a Country..." class="select2" style="width:300px;">
+	          <option value=""></option>
+	           <option value="United States">United States</option>
+	          <option value="United Kingdom">United Kingdom</option>
+	          <option value="Australia">Australia</option>
+	        </select>
+	      </div>
+	    </div>
+			
+		</td>
+		<td width="55%">
+ 
+	    <h4>Multiple Select</h4>
+ 
+	      <div>
+					<br/>
+	        <select id="country_multiple"  data-placeholder="Choose Countries..." class="select2" multiple style="width:420px;">
+	          <option value=""></option>
+	          <option value="United States">United States</option>
+	          <option value="United Kingdom">United Kingdom</option>
+	          <option value="Australia">Australia</option>
+	        </select>
+	      </div>
+	    </div>
+			
+		</td>
+	</tr>
+</table>
+  
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+</div>
+
+<script type="text/javascript" charset="utf-8">   
+ $("select").select2();
+</script>
+
+
+</body>
+</html>

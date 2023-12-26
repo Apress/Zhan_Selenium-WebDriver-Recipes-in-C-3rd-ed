@@ -1,0 +1,37 @@
+<html>
+<head>
+ <link rel="stylesheet" type="text/css" href="style.css"/>
+ <link rel="stylesheet" type="text/css" href="bootstrap.css"/>
+ <script type="text/javascript" src="jquery.js"></script>
+</head>
+<body>
+
+  <div id="container">
+
+    <p>Click the button to get your coordinates.</p>
+
+    <button onclick="getLocation()" id="use_current_location_btn">Use your current location</button>
+
+    <p id="demo"></p>
+
+    <script>
+    var x = document.getElementById("demo");
+
+    function getLocation() {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(showPosition);
+        } else { 
+            x.innerHTML = "Geolocation is not supported by this browser.";
+        }
+    }
+
+    function showPosition(position) {
+        x.innerHTML = "Latitude: " + position.coords.latitude + 
+        "<br>Longitude: " + position.coords.longitude;	
+    }
+    </script>
+
+  </div>
+
+</body>
+</html>

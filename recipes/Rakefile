@@ -1,0 +1,225 @@
+# You need Ruby (Rake, RWebSpec, ci_reporter gems installed)
+#   Simplest way on Windows is to install RubyShell (http://testwisely.com/downloads)
+
+require 'rubygems'
+gem 'ci_reporter'
+gem 'rspec'
+require 'rspec/core/rake_task'
+require 'ci/reporter/rake/rspec' # use this if you're using RSpec
+
+load File.join(File.dirname(__FILE__), "buildwise.rake")
+
+## Settings: Customize here...
+# 
+BUILDWISE_URL = ENV["BUILDWISE_MASTER"] || "http://buildwise.dev"
+BUILDWISE_QUICK_PROJECT_ID = "selenium-recipes-sequential-build"
+BUILDWISE_FULL_PROJECT_ID  = "selenium-recipes-parallel-build" # import to set for full build
+ 
+FULL_BUILD_MAX_TIME = ENV["DISTRIBUTED_MAX_BUILD_TIME"].to_i || 2 * 60 * 60   # max build time, over this, time out
+FULL_BUILD_CHECK_INTERVAL =  ENV["DISTRIBUTED_BUILD_CHECK_INTERVAL"].to_i || 20  # check interval for build complete
+
+$test_dir =  File.expand_path(File.dirname(__FILE__))  # change to aboslution path if invoktion is not this directory
+# rspec will be created 'spec/reports' under checkout dir
+$performance_test_dir =  File.expand_path( File.join(File.dirname(__FILE__), "performance"))  # change to aboslution path if invoktion is not this directory
+
+# this is C# test script project, test file concept does not apply here
+$ignore_checking_test_file_exists = true 
+
+def get_test_classes_list
+  tmp_dir = File.expand_path File.join(File.dirname(__FILE__),  "tmp")  
+  FileUtils.rm_rf(tmp_dir)if File.exist?(tmp_dir)
+  FileUtils.mkdir_p(tmp_dir)
+  
+  project_dir = File.expand_path File.dirname(__FILE__)
+  FileUtils.chdir(project_dir)
+  cmd = "dotnet vstest  #{dll_file} /ListFullyQualifiedTests /ListTestsTargetPath:#{tmp_dir}/Tests.txt"  
+  output = `#{cmd}`
+  
+  puts "Generate qualified test case names to file: #{tmp_dir}/Tests.txt}"
+  sleep 0.1
+  test_lines = []
+  File.read("#{tmp_dir}/Tests.txt").split.each  do |line|
+    test_class = File.basename(line, File.extname(line))
+    test_lines << test_class
+  end
+  test_lines.uniq!
+  test_lines.sort!
+  return test_lines
+end
+
+
+# NOTE
+#  Change to yours here
+def dll_file
+  "./bin/Debug/net7.0/SeleniumRecipesCSharp.dll"
+end
+
+
+# List tests you want to exclude
+#
+def excluded_spec_files
+  # NOTE, testing only for faster develping agent, remove a couple of test later
+  ["SeleniumRecipes.GoogleSearchDifferentBrowsersTest",    
+   "SeleniumRecipes.Ch15QueryDatabaseTest",
+   "SeleniumRecipes.Ch25GridTest",
+   "SeleniumRecipes.Ch25RemoteTest",
+   "SeleniumRecipes.Ch23Selenium4RelativeLocatorNearTest"
+  ]  
+end
+
+
+def specs_for_quick_build
+  # list test files to be run in a quick build
+  
+  # 
+  the_test_classes_list = get_test_classes_list
+  
+  # Or you can specify in a list ["TestA", "TestB"]
+  
+  return the_test_classes_list
+end
+
+
+desc "remove generated files"
+task "clean" do
+  project_dir = File.expand_path File.dirname(__FILE__)
+  ["bin", "obj"].each do |x|
+    tmp_dir = File.join(project_dir, x)
+    FileUtils.rm_rf(tmp_dir)
+  end
+  FileUtils.rm_rf("#{project_dir}/artifacts/.")
+end
+
+desc "build, compile all JS files into one DLL file"
+task "build" do
+  project_dir = File.expand_path File.dirname(__FILE__)
+  FileUtils.chdir(project_dir)
+  cmd = "dotnet build"
+  `#{cmd}`
+end
+
+# dotnet test commands works, but its unit test command
+# https://learn.microsoft.com/en-us/dotnet/core/tools/dotnet-test 
+desc "run simple test"
+task "ui_tests:sample" => ["build"] do
+  project_dir = File.expand_path File.dirname(__FILE__)
+  FileUtils.chdir(project_dir)
+  cmd = "dotnet test  #{dll_file}  --filter SeleniumRecipes.NavigationTest"
+  output = `#{cmd}`
+  puts output
+end
+
+
+desc "run simple test with Junit output"
+task "ui_tests:sample:junit" => ["clean", "build"] do
+  project_dir = File.expand_path File.dirname(__FILE__)
+  FileUtils.chdir(project_dir)
+  cmd = "dotnet test #{dll_file} --filter SeleniumRecipes.NavigationTest --logger 'junit;LogFilePath=./artifacts/TestResults.xml'"
+  output = `#{cmd}`
+  puts output
+end
+
+desc "run all tests in the DLL in one process. Problems: after_all is not inovked immeddately, annoying"
+task "ui_tests:all" => ["build"] do
+  project_dir = File.expand_path File.dirname(__FILE__)
+  FileUtils.chdir(project_dir)
+  cmd = "dotnet test ./bin/Debug/net7.0/SeleniumRecipesCSharp.dll"
+  output = `#{cmd}`
+  puts output
+end
+
+# Ref: https://learn.microsoft.com/en-us/dotnet/core/tools/dotnet-vstest
+
+desc "run simple test class"
+task "vstest:sample" => ["build"] do
+  project_dir = File.expand_path File.dirname(__FILE__)
+  FileUtils.chdir(project_dir)
+  cmd = "dotnet vstest  #{dll_file}  /Tests:SeleniumRecipes.NavigationTest"
+  output = `#{cmd}`
+  puts output
+end
+
+desc "run simple test case "
+task "vstest:case:sample" => ["build"] do
+  project_dir = File.expand_path File.dirname(__FILE__)
+  FileUtils.chdir(project_dir)
+  cmd = "dotnet vstest  #{dll_file}  /Tests:SeleniumRecipes.NavigationTest.TestBackRefreshForward"
+  output = `#{cmd}`
+  puts output
+end
+
+desc "run simple test case "
+task "vstest:list" => ["build"] do
+  project_dir = File.expand_path File.dirname(__FILE__)
+  FileUtils.chdir(project_dir)
+  cmd = "dotnet vstest ./bin/Debug/net7.0/SeleniumRecipesCSharp.dll /ListTests"
+  output = `#{cmd}`
+  puts output
+end
+
+
+desc "run simple test case "
+task "vstest:list:output" => ["build"] do
+  test_classes = get_test_classes_list
+  puts test_classes.inspect
+end
+
+
+desc "run all tests in this folder"
+RSpec::Core::RakeTask.new("ui_tests:quick") do |t|
+  reports_dir = File.expand_path File.join(File.dirname(__FILE__),  "reports")  
+  FileUtils.rm_rf(reports_dir)if File.exist?(reports_dir)
+  FileUtils.mkdir_p(reports_dir)
+  exit_code = 0
+
+  all_test_classes = get_test_classes_list  
+  
+  specs_to_be_executed = buildwise_determine_specs_for_quick_build(all_test_classes, excluded_spec_files);
+  specs_to_be_executed.each do |test_class|    
+    cmd = "dotnet test  #{dll_file}  --filter #{test_class} --logger 'junit;LogFilePath=#{reports_dir}/TestResult-#{test_class}.xml'"
+
+    # TODO, might be vstest better, but generate trx format, junit need another assembly        
+    # cmd = "dotnet vstest ./bin/Debug/net7.0/SeleniumRecipesCSharp.dll /Tests:#{test_class} /Logger:trx"
+
+    # cmd = "dotnet vstest ./bin/Debug/net7.0/SeleniumRecipesCSharp.dll /Tests:#{test_class} /logger:JUnitLogger;TestResultsFile==./#{reports_dir}/TestResult-#{test_class}.xml'"
+
+    puts cmd
+    result = system(cmd)
+    if exit_code == 0 && !result
+      exit_code = -1
+    end   
+    sleep 0.25
+  end
+  exit(exit_code)    
+end
+
+
+
+desc "run quick tests from BuildWise"
+task "ci:ui_tests:quick" => ["ci:setup:rspec"] do
+  build_id = buildwise_start_build(:project_name => BUILDWISE_QUICK_PROJECT_ID,
+    :working_dir => File.expand_path(File.dirname(__FILE__)),
+    :ui_test_dir => ["."],
+    :excluded => excluded_spec_files
+  )
+  buildwise_run_sequential_build_target(build_id, "ui_tests:quick")
+end
+
+
+
+## Full Build
+#
+#  TODO - how to determin useing RSpec or Cucumber
+#
+desc "Running tests distributedly"
+task "ci:ui_tests:full" => ["ci:setup:rspec"] do
+  build_id = buildwise_start_build(:project_name => BUILDWISE_FULL_PROJECT_ID,
+                                   :working_dir => File.expand_path(File.dirname(__FILE__)),
+                                   :ui_test_dir => ["spec"],
+                                   :except => excluded_spec_files || [],
+                                   :parallel => true
+  )
+
+  buildwise_montior_parallel_execution(build_id, :max_wait_time => FULL_BUILD_MAX_TIME, :check_interval => FULL_BUILD_CHECK_INTERVAL)
+end
+
